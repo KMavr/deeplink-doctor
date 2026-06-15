@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Lint, typecheck, test (Node ${{ matrix.node }})
+    name: Lint, typecheck, tests (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

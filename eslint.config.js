@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   ...tseslint.configs.recommended,
-  globalIgnores(['dist/**', 'node_modules/**', 'coverage/**']),
+  globalIgnores(['dist/**', 'node_modules/**', 'coverage/**', 'tests/fixtures/**']),
   {
     plugins: { prettier: prettierPlugin },
     rules: {
