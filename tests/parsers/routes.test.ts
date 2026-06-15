@@ -1,8 +1,8 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it, expect, beforeAll } from 'vitest';
-import { parseRoutes } from '../src/parsers/routes.js';
-import type { PathData } from '../src/types.js';
+import { parseRoutes } from '../../src/parsers/routes.js';
+import type { PathData } from '../../src/types.js';
 
 /**
  * Contract for `parseRoutes(projectRoot)`:
@@ -21,7 +21,7 @@ import type { PathData } from '../src/types.js';
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
-const fixture = (name: string) => join(here, 'fixtures', name);
+const fixture = (name: string) => join(here, '..', 'fixtures', name);
 
 const sortedByFilePath = (paths: string[]) => [...paths].sort((a, b) => a.localeCompare(b));
 
