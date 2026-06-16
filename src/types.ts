@@ -42,3 +42,11 @@ export type ResolvedExpoConfig = {
   ios?: { bundleIdentifier?: string; associatedDomains?: string[] };
   android?: { package?: string; intentFilters?: IntentFilter[] };
 };
+
+export type LinkTarget = {
+  host?: string;
+  scheme?: string;
+  segments: string[];
+  kind: 'exact' | 'prefix' | 'pattern';
+  raw: string;
+};
