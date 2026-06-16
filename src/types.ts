@@ -9,3 +9,36 @@ export type PathData = {
   isApi: boolean;
   isSpecial: boolean;
 };
+
+export type IntentFilterData = {
+  scheme?: string;
+  host?: string;
+  pathPrefix?: string;
+  pathPattern?: string;
+  path?: string;
+};
+
+export type IntentFilter = {
+  action?: string;
+  autoVerify?: boolean;
+  category?: string[];
+  data: IntentFilterData[];
+};
+
+export type LinkConfig = {
+  schemes: string[];
+  ios: {
+    bundleIdentifier?: string;
+    associatedDomains: string[];
+  };
+  android: {
+    package?: string;
+    intentFilters: IntentFilter[];
+  };
+};
+
+export type ResolvedExpoConfig = {
+  scheme?: string | string[];
+  ios?: { bundleIdentifier?: string; associatedDomains?: string[] };
+  android?: { package?: string; intentFilters?: IntentFilter[] };
+};
