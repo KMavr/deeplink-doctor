@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { isLinkableRoute } from '../lib/parseRoutePath.js';
+import { isLinkableRoute } from '../routes/parseRoutePath.js';
 import type { PathData } from '../types.js';
 
 const tagsFor = (route: PathData): string[] => {

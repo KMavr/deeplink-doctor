@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parseRoutePath } from '../../src/lib/parseRoutePath.js';
-import { routeHandlesPath } from '../../src/lib/routeHandlesPath.js';
+import { parseRoutePath } from '../../src/routes/parseRoutePath.js';
+import { routeHandlesPath } from '../../src/routes/routeHandlesPath.js';
 
 /**
  * Contract for `routeHandlesPath(route, pathSegments)`:

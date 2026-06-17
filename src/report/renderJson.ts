@@ -1,4 +1,4 @@
-import { isLinkableRoute } from '../lib/parseRoutePath.js';
+import { isLinkableRoute } from '../routes/parseRoutePath.js';
 import type { PathData } from '../types.js';
 
 export const renderJson = (routes: PathData[]): string =>

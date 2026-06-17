@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractLinkTargets } from '../../src/lib/extractLinkTargets.js';
+import { extractLinkTargets } from '../../src/links/extractLinkTargets.js';
 import type { IntentFilter, LinkConfig, LinkTarget } from '../../src/types.js';
 
 /**

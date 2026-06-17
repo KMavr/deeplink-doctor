@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseRoutePath, isLinkableRoute } from '../../src/lib/parseRoutePath.js';
+import { parseRoutePath, isLinkableRoute } from '../../src/routes/parseRoutePath.js';
 
 /**
  * Contract for `parseRoutePath(relPath)`:

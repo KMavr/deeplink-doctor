@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractLinkConfig } from '../../src/lib/extractLinkConfig.js';
+import { extractLinkConfig } from '../../src/links/extractLinkConfig.js';
 import type { LinkConfig } from '../../src/types.js';
 
 /**

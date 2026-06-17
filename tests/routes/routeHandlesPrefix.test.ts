@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parseRoutePath } from '../../src/lib/parseRoutePath.js';
-import { routeHandlesPrefix } from '../../src/lib/routeHandlesPrefix.js';
+import { parseRoutePath } from '../../src/routes/parseRoutePath.js';
+import { routeHandlesPrefix } from '../../src/routes/routeHandlesPrefix.js';
 
 /**
  * Contract for `routeHandlesPrefix(route, prefixSegments)`:
