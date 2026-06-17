@@ -50,3 +50,13 @@ export type LinkTarget = {
   kind: 'exact' | 'prefix' | 'pattern';
   raw: string;
 };
+
+export type FindingCode = 'DL001';
+
+export type Finding = {
+  code: FindingCode;
+  severity: 'warn' | 'error';
+  message: string;
+  route?: string;
+  target?: string;
+};
