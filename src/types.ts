@@ -51,7 +51,7 @@ export type LinkTarget = {
   raw: string;
 };
 
-export type FindingCode = 'DL001';
+export type FindingCode = 'DL001' | 'DL002';
 
 export type Finding = {
   code: FindingCode;
