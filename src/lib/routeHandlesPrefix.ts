@@ -1,8 +1,14 @@
 import type { PathData } from '../types.js';
 
-export const routeHandlesPath = (route: PathData, pathSegments: string[]): boolean => {
+export const routeHandlesPrefix = (route: PathData, pathSegments: string[]): boolean => {
+  if (pathSegments.length === 0) {
+    return true;
+  }
+
   if (pathSegments.length < route.segments.length) {
-    return false;
+    return pathSegments.every((segment, i) =>
+      route.segments[i].kind === 'static' ? route.segments[i].value === segment : true,
+    );
   }
 
   if (pathSegments.length > route.segments.length) {
