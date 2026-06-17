@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { isLinkableRoute } from '../routes/parseRoutePath.js';
-import type { PathData } from '../types.js';
+import type { Finding, PathData } from '../types.js';
 
 const tagsFor = (route: PathData): string[] => {
   const tags: [active: boolean, label: string][] = [
@@ -14,7 +14,7 @@ const tagsFor = (route: PathData): string[] => {
   return tags.filter(([active]) => active).map(([, label]) => label);
 };
 
-export const renderHuman = (routes: PathData[]): string => {
+export const renderRoutes = (routes: PathData[]): string => {
   if (routes.length === 0) {
     return chalk.yellow('No routes found in app/.');
   }
@@ -38,4 +38,31 @@ export const renderHuman = (routes: PathData[]): string => {
     sections.push(`${heading}\n${other.map(renderRoute).join('\n')}`);
   }
   return sections.join('\n\n');
+};
+
+const plural = (count: number, word: string): string => `${word}${count === 1 ? '' : 's'}`;
+
+const SEVERITY_LABEL: Record<Finding['severity'], string> = {
+  error: chalk.red('error'),
+  warn: chalk.yellow('warn'),
+};
+
+export const renderFindings = (findings: Finding[]): string => {
+  if (findings.length === 0) {
+    return chalk.green('✓ No deep-link issues found.');
+  }
+
+  const lines = findings.map(
+    (finding) =>
+      `  ${chalk.dim(finding.code)}  ${SEVERITY_LABEL[finding.severity]}  ${finding.message}`,
+  );
+
+  const errors = findings.filter((finding) => finding.severity === 'error').length;
+  const warnings = findings.filter((finding) => finding.severity === 'warn').length;
+  const summary = chalk.bold(
+    `${findings.length} ${plural(findings.length, 'issue')} ` +
+      `(${errors} ${plural(errors, 'error')}, ${warnings} ${plural(warnings, 'warning')})`,
+  );
+
+  return [...lines, '', summary].join('\n');
 };

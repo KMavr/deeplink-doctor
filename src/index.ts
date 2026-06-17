@@ -2,8 +2,8 @@
 import { createRequire } from 'node:module';
 import { Command } from 'commander';
 import { parseRoutes } from './parsers/routes.js';
-import { renderHuman } from './report/renderHuman.js';
-import { renderJson } from './report/renderJson.js';
+import * as human from './report/human.js';
+import * as json from './report/json.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json') as { version: string; description: string };
@@ -19,9 +19,9 @@ program
     try {
       const routes = parseRoutes(process.cwd());
       if (options.json) {
-        console.log(renderJson(routes));
+        console.log(json.renderRoutes(routes));
       } else {
-        console.log(renderHuman(routes));
+        console.log(human.renderRoutes(routes));
       }
     } catch (error) {
       console.error(error instanceof Error ? error.message : String(error));
