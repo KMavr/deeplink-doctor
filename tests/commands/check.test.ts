@@ -9,10 +9,12 @@ import type { IntentFilterData, LinkConfig, PathData } from '../../src/types.js'
  * exercised here without ever spawning `npx expo` or touching the filesystem.
  */
 
+// config-hygiene valid (has package) so these reconcile-focused tests aren't
+// polluted by DL1xx findings; config checks have their own suites.
 const config = (data: IntentFilterData[]): LinkConfig => ({
   schemes: [],
   ios: { associatedDomains: [] },
-  android: { intentFilters: [{ data }] },
+  android: { package: 'com.x.app', intentFilters: [{ data }] },
 });
 
 // deps where the readers just return canned models
@@ -109,5 +111,18 @@ describe('runCheck', () => {
     );
     expect(result.exitCode).toBe(2);
     expect(result.report).toContain('no app/ directory');
+  });
+
+  it('surfaces config-hygiene findings (DL101) alongside reconcile findings', () => {
+    // a malformed associatedDomains entry is a config-level error; it must reach
+    // the report, which proves checkConfig is wired into runCheck.
+    const linkConfig: LinkConfig = {
+      schemes: [],
+      ios: { bundleIdentifier: 'com.x.app', associatedDomains: ['bad.com'] },
+      android: { package: 'com.x.app', intentFilters: [] },
+    };
+    const result = runCheck('/root', deps([route('index.tsx')], linkConfig), {});
+    expect(result.report).toContain('DL101');
+    expect(result.exitCode).toBe(1);
   });
 });
