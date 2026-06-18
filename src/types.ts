@@ -42,3 +42,21 @@ export type ResolvedExpoConfig = {
   ios?: { bundleIdentifier?: string; associatedDomains?: string[] };
   android?: { package?: string; intentFilters?: IntentFilter[] };
 };
+
+export type LinkTarget = {
+  host?: string;
+  scheme?: string;
+  segments: string[];
+  kind: 'exact' | 'prefix' | 'pattern';
+  raw: string;
+};
+
+export type FindingCode = 'DL001' | 'DL002';
+
+export type Finding = {
+  code: FindingCode;
+  severity: 'warn' | 'error';
+  message: string;
+  route?: string;
+  target?: string;
+};

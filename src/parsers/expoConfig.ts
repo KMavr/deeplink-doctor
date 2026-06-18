@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { extractLinkConfig } from '../lib/extractLinkConfig.js';
+import { extractLinkConfig } from '../links/extractLinkConfig.js';
 import type { LinkConfig, ResolvedExpoConfig } from '../types.js';
 
 type ConfigRunner = (projectRoot: string) => string;

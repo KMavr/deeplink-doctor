@@ -1,6 +1,6 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
-import { parseRoutePath } from '../lib/parseRoutePath.js';
+import { parseRoutePath } from '../routes/parseRoutePath.js';
 import type { PathData } from '../types.js';
 
 const ROUTE_FILE = /(?<!\.(d|test|stories|spec))\.(js|ts|jsx|tsx)$/;
