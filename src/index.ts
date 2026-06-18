@@ -32,7 +32,7 @@ program
   });
 
 program
-  .command('check')
+  .command('check', { isDefault: true })
   .description('Reconcile routes against native deep-link config and report mismatches')
   .option('--json', 'Emit machine-readable JSON; suppress human output')
   .option('--strict', 'Promote warnings to failures (exit non-zero on any finding)')
