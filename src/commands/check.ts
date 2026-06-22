@@ -1,4 +1,5 @@
 import { calculateExitCode } from '../checks/calculateExitCode.js';
+import { checkConfig } from '../checks/checkConfig.js';
 import { runChecks } from '../checks/runChecks.js';
 import { extractLinkTargets } from '../links/extractLinkTargets.js';
 import * as human from '../report/human.js';
@@ -17,8 +18,9 @@ export const runCheck = (
   options: CheckOptions,
 ): { report: string; exitCode: 0 | 1 | 2 } => {
   try {
-    const targets = extractLinkTargets(deps.readLinkConfig(root));
-    const findings = runChecks(deps.readRoutes(root), targets);
+    const config = deps.readLinkConfig(root);
+    const targets = extractLinkTargets(config);
+    const findings = [...runChecks(deps.readRoutes(root), targets), ...checkConfig(config)];
     const report = options.json ? json.renderFindings(findings) : human.renderFindings(findings);
     return { report, exitCode: calculateExitCode(findings, { strict: options.strict ?? false }) };
   } catch (error) {
