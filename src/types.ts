@@ -60,3 +60,13 @@ export type Finding = {
   route?: string;
   target?: string;
 };
+
+export type SuppressionRule = {
+  code: string;
+  route?: string;
+  reason?: string;
+  owner?: string;
+  revisitWhen?: string;
+};
+
+export type DeeplinkConfig = { ignore: SuppressionRule[] };
