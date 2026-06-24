@@ -60,6 +60,7 @@ export const CHECK_CODES = [
   'DL102',
   'DL103',
   'DL104',
+  'DL201',
   'DL202',
   'DL203',
   'DL204',
@@ -76,11 +77,12 @@ export type Finding = {
   target?: string;
 };
 
-// Hosted association files (M7). appIDs flattened across applinks.details[];
-// AASA paths/components are intentionally not modelled until a check consumes them.
 export type AasaModel = { appIDs: string[] };
 
 export type AssetlinkEntry = { packageName: string; fingerprints: string[] };
+
+export type HttpResponse = { status: number; redirected: boolean; body: string };
+export type Fetcher = (url: string) => Promise<HttpResponse>;
 
 export type SuppressionRule = {
   code: string;
