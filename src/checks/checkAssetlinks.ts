@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import type { AssetlinkEntry, Finding, LinkConfig } from '../types.js';
 
 export const checkAssetlinks = (assetlinks: AssetlinkEntry[], config: LinkConfig): Finding[] => {
@@ -7,13 +8,7 @@ export const checkAssetlinks = (assetlinks: AssetlinkEntry[], config: LinkConfig
   }
 
   if (assetlinks.every(({ packageName }) => packageName !== pkg)) {
-    return [
-      {
-        code: 'DL203',
-        severity: 'error',
-        message: `assetlinks.json has no entry for android.package "${pkg}"`,
-      },
-    ];
+    return [generateFinding('DL203', `assetlinks.json has no entry for android.package "${pkg}"`)];
   }
 
   return assetlinks.flatMap(({ packageName, fingerprints }) => {
@@ -21,11 +16,10 @@ export const checkAssetlinks = (assetlinks: AssetlinkEntry[], config: LinkConfig
       return fingerprints.length > 0
         ? []
         : [
-            {
-              code: 'DL204',
-              severity: 'warn',
-              message: `assetlinks entry for "${pkg}" has an empty sha256_cert_fingerprints array`,
-            },
+            generateFinding(
+              'DL204',
+              `assetlinks entry for "${pkg}" has an empty sha256_cert_fingerprints array`,
+            ),
           ];
     }
     return [];

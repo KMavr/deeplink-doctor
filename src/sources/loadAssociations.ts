@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import type { AasaModel, AssetlinkEntry, Fetcher, Finding } from '../types.js';
 import { parseAasa } from './aasa.js';
 import { parseAssetlinks } from './assetlinks.js';
@@ -11,28 +12,24 @@ const createAasaUrl = (domain: string) =>
   `https://${domain}/.well-known/apple-app-site-association`;
 const createAssetlinksUrl = (domain: string) => `https://${domain}/.well-known/assetlinks.json`;
 
-const generateFinding = (url: string, reason: string): Finding => ({
-  code: 'DL201',
-  severity: 'error',
-  message: `${url} ${reason}`,
-  target: url,
-});
+const associationFinding = (url: string, reason: string): Finding =>
+  generateFinding('DL201', `${url} ${reason}`, { target: url });
 
 const fetchFile = async (fetcher: Fetcher, url: string): Promise<FetchResult> => {
   try {
     const { status, redirected, body } = await fetcher(url);
 
     if (redirected) {
-      return { body: null, finding: generateFinding(url, 'is served via a redirect') };
+      return { body: null, finding: associationFinding(url, 'is served via a redirect') };
     }
 
     if (status < 200 || status >= 300) {
-      return { body: null, finding: generateFinding(url, `responded with status ${status}`) };
+      return { body: null, finding: associationFinding(url, `responded with status ${status}`) };
     }
 
     return { body, finding: null };
   } catch {
-    return { body: null, finding: generateFinding(url, 'is unreachable') };
+    return { body: null, finding: associationFinding(url, 'is unreachable') };
   }
 };
 
@@ -48,7 +45,7 @@ const parseFile = <T>(
   try {
     return { value: parse(fetched.body), findings: [] };
   } catch {
-    return { value: null, findings: [generateFinding(url, 'did not return valid JSON')] };
+    return { value: null, findings: [associationFinding(url, 'did not return valid JSON')] };
   }
 };
 

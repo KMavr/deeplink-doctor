@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import type { Finding, LinkConfig } from '../types.js';
 
 export const WEB_SCHEMES = ['http', 'https'];
@@ -9,12 +10,10 @@ export const checkScheme = (config: LinkConfig): Finding[] => {
   );
   if (hasNoSchemes && hasCustomScheme) {
     return [
-      {
-        code: 'DL003',
-        severity: 'error',
-        message:
-          'A custom-scheme deep link is configured but no scheme is declared; set "scheme" in your Expo config',
-      },
+      generateFinding(
+        'DL003',
+        'A custom-scheme deep link is configured but no scheme is declared; set "scheme" in your Expo config',
+      ),
     ];
   }
   return [];

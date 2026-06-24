@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import type { AasaModel, Finding, LinkConfig } from '../types.js';
 
 export const checkAasaAppIds = (aasa: AasaModel, config: LinkConfig): Finding[] => {
@@ -12,10 +13,9 @@ export const checkAasaAppIds = (aasa: AasaModel, config: LinkConfig): Finding[] 
     return [];
   }
   return [
-    {
-      code: 'DL202',
-      severity: 'error',
-      message: `AASA appID does not match ios.bundleIdentifier "${bundleIdentifierConfig}"`,
-    },
+    generateFinding(
+      'DL202',
+      `AASA appID does not match ios.bundleIdentifier "${bundleIdentifierConfig}"`,
+    ),
   ];
 };

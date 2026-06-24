@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import { CHECK_CODES, type Finding, type SuppressionRule } from '../types.js';
 
 const isCheckCode = (code: string): boolean => (CHECK_CODES as readonly string[]).includes(code);
@@ -30,22 +31,20 @@ export const applySuppressions = (
     const route = rule.route ? { route: rule.route } : {};
     if (!isCheckCode(rule.code)) {
       return [
-        {
-          code: 'DL902',
-          severity: 'warn',
-          message: `Suppression for unknown code "${rule.code}" — possible typo`,
-          ...route,
-        },
+        generateFinding(
+          'DL902',
+          `Suppression for unknown code "${rule.code}" — possible typo`,
+          route,
+        ),
       ];
     }
     if (!rule?.reason || !rule?.owner) {
       return [
-        {
-          code: 'DL901',
-          severity: 'warn',
-          message: `Suppression for ${rule.code} is missing a reason and/or owner`,
-          ...route,
-        },
+        generateFinding(
+          'DL901',
+          `Suppression for ${rule.code} is missing a reason and/or owner`,
+          route,
+        ),
       ];
     }
     return [];
