@@ -21,6 +21,7 @@ type CheckOptions = {
   remote?: boolean;
   domain?: string;
   config?: string;
+  silent?: boolean;
 };
 
 const remoteFindings = async (
@@ -58,10 +59,14 @@ export const runCheck = async (
       findings,
       deps.readSuppressionConfig(root, options.config),
     );
+
+    const silent = options.silent === true && options.strict !== true;
+    const reported = silent ? active.filter((finding) => finding.severity === 'error') : active;
+
     const report = options.json
-      ? json.renderFindings(active, suppressed)
-      : human.renderFindings(active, suppressed);
-    return { report, exitCode: calculateExitCode(active, { strict: options.strict ?? false }) };
+      ? json.renderFindings(reported, suppressed)
+      : human.renderFindings(reported, suppressed);
+    return { report, exitCode: calculateExitCode(reported, { strict: options.strict ?? false }) };
   } catch (error) {
     return { report: error instanceof Error ? error.message : String(error), exitCode: 2 };
   }
