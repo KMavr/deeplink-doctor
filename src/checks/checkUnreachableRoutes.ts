@@ -1,3 +1,4 @@
+import { generateFinding } from '../lib/generateFinding.js';
 import { isLinkableRoute } from '../routes/parseRoutePath.js';
 import type { Finding, LinkTarget, PathData } from '../types.js';
 import { targetMatchesRoute } from './targetMatchesRoute.js';
@@ -9,10 +10,9 @@ export const checkUnreachableRoutes = (routes: PathData[], targets: LinkTarget[]
     targets.every((target) => !targetMatchesRoute(route, target)),
   );
 
-  return unreachableRoutes.map((route) => ({
-    code: 'DL002',
-    severity: 'warn',
-    route: route.pathname,
-    message: `Route "${route.pathname}" is not reachable by any configured link`,
-  }));
+  return unreachableRoutes.map((route) =>
+    generateFinding('DL002', `Route "${route.pathname}" is not reachable by any configured link`, {
+      route: route.pathname,
+    }),
+  );
 };
