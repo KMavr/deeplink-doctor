@@ -297,3 +297,46 @@ describe('runCheck (--remote)', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 });
+
+describe('runCheck (--silent)', () => {
+  it('hides warnings and exits 0 when only warnings remain', async () => {
+    const result = await runCheck(
+      '/root',
+      deps(
+        [route('product/[id].tsx'), route('settings/index.tsx')],
+        config([{ pathPrefix: '/product' }]),
+      ),
+      { silent: true },
+    );
+    expect(result.exitCode).toBe(0);
+    expect(result.report).not.toContain('DL002');
+    expect(result.report).toContain('No deep-link issues');
+  });
+
+  it('still shows errors and exits 1', async () => {
+    const result = await runCheck(
+      '/root',
+      deps(
+        [route('product/[id].tsx'), route('settings/index.tsx')],
+        config([{ path: '/ghost' }, { pathPrefix: '/product' }]),
+      ),
+      { silent: true },
+    );
+    expect(result.exitCode).toBe(1);
+    expect(result.report).toContain('DL001');
+    expect(result.report).not.toContain('DL002');
+  });
+
+  it('--strict overrides --silent: warnings stay and fail', async () => {
+    const result = await runCheck(
+      '/root',
+      deps(
+        [route('product/[id].tsx'), route('settings/index.tsx')],
+        config([{ pathPrefix: '/product' }]),
+      ),
+      { silent: true, strict: true },
+    );
+    expect(result.exitCode).toBe(1);
+    expect(result.report).toContain('DL002');
+  });
+});
