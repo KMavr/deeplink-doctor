@@ -52,7 +52,18 @@ export type LinkTarget = {
 };
 
 // Codes emitted by the checks themselves (suppressible by ignore rules).
-export const CHECK_CODES = ['DL001', 'DL002', 'DL003', 'DL101', 'DL102', 'DL103', 'DL104'] as const;
+export const CHECK_CODES = [
+  'DL001',
+  'DL002',
+  'DL003',
+  'DL101',
+  'DL102',
+  'DL103',
+  'DL104',
+  'DL202',
+  'DL203',
+  'DL204',
+] as const;
 
 // DL9xx are governance codes emitted by the suppression layer, not the checks.
 export type FindingCode = (typeof CHECK_CODES)[number] | 'DL901' | 'DL902';
