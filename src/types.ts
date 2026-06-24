@@ -51,7 +51,11 @@ export type LinkTarget = {
   raw: string;
 };
 
-export type FindingCode = 'DL001' | 'DL002' | 'DL003' | 'DL101' | 'DL102' | 'DL103' | 'DL104';
+// Codes emitted by the checks themselves (suppressible by ignore rules).
+export const CHECK_CODES = ['DL001', 'DL002', 'DL003', 'DL101', 'DL102', 'DL103', 'DL104'] as const;
+
+// DL9xx are governance codes emitted by the suppression layer, not the checks.
+export type FindingCode = (typeof CHECK_CODES)[number] | 'DL901' | 'DL902';
 
 export type Finding = {
   code: FindingCode;
@@ -60,3 +64,13 @@ export type Finding = {
   route?: string;
   target?: string;
 };
+
+export type SuppressionRule = {
+  code: string;
+  route?: string;
+  reason?: string;
+  owner?: string;
+  revisitWhen?: string;
+};
+
+export type DeeplinkConfig = { ignore: SuppressionRule[] };

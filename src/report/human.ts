@@ -47,9 +47,11 @@ const SEVERITY_LABEL: Record<Finding['severity'], string> = {
   warn: chalk.yellow('warn'),
 };
 
-export const renderFindings = (findings: Finding[]): string => {
+export const renderFindings = (findings: Finding[], suppressedCount: number = 0): string => {
+  const suppressedNote = suppressedCount > 0 ? chalk.dim(` (${suppressedCount} suppressed)`) : '';
+
   if (findings.length === 0) {
-    return chalk.green('✓ No deep-link issues found.');
+    return chalk.green('✓ No deep-link issues found.') + suppressedNote;
   }
 
   const lines = findings.map(
@@ -59,10 +61,11 @@ export const renderFindings = (findings: Finding[]): string => {
 
   const errors = findings.filter((finding) => finding.severity === 'error').length;
   const warnings = findings.filter((finding) => finding.severity === 'warn').length;
-  const summary = chalk.bold(
-    `${findings.length} ${plural(findings.length, 'issue')} ` +
-      `(${errors} ${plural(errors, 'error')}, ${warnings} ${plural(warnings, 'warning')})`,
-  );
+  const summary =
+    chalk.bold(
+      `${findings.length} ${plural(findings.length, 'issue')} ` +
+        `(${errors} ${plural(errors, 'error')}, ${warnings} ${plural(warnings, 'warning')})`,
+    ) + suppressedNote;
 
   return [...lines, '', summary].join('\n');
 };

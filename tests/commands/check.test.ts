@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { runCheck } from '../../src/commands/check.js';
 import { parseRoutePath } from '../../src/routes/parseRoutePath.js';
-import type { IntentFilterData, LinkConfig, PathData } from '../../src/types.js';
+import type { IntentFilterData, LinkConfig, PathData, SuppressionRule } from '../../src/types.js';
 
 /**
  * `runCheck(root, deps, options)` orchestrates the `check` command with its
@@ -18,9 +18,10 @@ const config = (data: IntentFilterData[]): LinkConfig => ({
 });
 
 // deps where the readers just return canned models
-const deps = (routes: PathData[], linkConfig: LinkConfig) => ({
+const deps = (routes: PathData[], linkConfig: LinkConfig, rules: SuppressionRule[] = []) => ({
   readRoutes: () => routes,
   readLinkConfig: () => linkConfig,
+  readSuppressionConfig: () => rules,
 });
 
 const route = (file: string) => parseRoutePath(file);
@@ -124,5 +125,18 @@ describe('runCheck', () => {
     const result = runCheck('/root', deps([route('index.tsx')], linkConfig), {});
     expect(result.report).toContain('DL101');
     expect(result.exitCode).toBe(1);
+  });
+
+  it('a rule suppressing the only error drops it from the report and exits 0', () => {
+    const linkConfig: LinkConfig = {
+      schemes: [],
+      ios: { bundleIdentifier: 'com.x.app', associatedDomains: ['bad.com'] }, // DL101 error
+      android: { package: 'com.x.app', intentFilters: [] },
+    };
+    const rules: SuppressionRule[] = [{ code: 'DL101', reason: 'legacy', owner: 'kmavr' }];
+    const result = runCheck('/root', deps([route('index.tsx')], linkConfig, rules), {});
+    expect(result.report).not.toContain('DL101');
+    expect(result.report).toContain('1 suppressed');
+    expect(result.exitCode).toBe(0);
   });
 });
