@@ -84,6 +84,8 @@ export type AssetlinkEntry = { packageName: string; fingerprints: string[] };
 export type HttpResponse = { status: number; redirected: boolean; body: string };
 export type Fetcher = (url: string) => Promise<HttpResponse>;
 
+export type Associations = { aasa: AasaModel; assetlinks: AssetlinkEntry[]; findings: Finding[] };
+
 export type SuppressionRule = {
   code: string;
   route?: string;

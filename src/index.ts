@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import { createRequire } from 'node:module';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import { runCheck } from './commands/check.js';
 import { readLinkConfig } from './parsers/expoConfig.js';
 import { parseRoutes } from './parsers/routes.js';
 import * as human from './report/human.js';
 import * as json from './report/json.js';
+import { loadAssociations } from './sources/loadAssociations.js';
 import { readSuppressionConfig } from './suppressions/readSuppressionConfig.js';
 
 const require = createRequire(import.meta.url);
@@ -37,18 +39,32 @@ program
   .description('Reconcile routes against native deep-link config and report mismatches')
   .option('--json', 'Emit machine-readable JSON; suppress human output')
   .option('--strict', 'Promote warnings to failures (exit non-zero on any finding)')
-  .action((options: { json?: boolean; strict?: boolean }) => {
-    const { report, exitCode } = runCheck(
-      process.cwd(),
-      { readRoutes: parseRoutes, readLinkConfig, readSuppressionConfig },
-      options,
-    );
-    if (exitCode === 2) {
-      console.error(report);
-    } else {
-      console.log(report);
-    }
-    process.exitCode = exitCode;
-  });
+  .option(
+    '--remote',
+    'Also fetch and check hosted association files (AASA, assetlinks) — makes network requests',
+  )
+  .option('--domain <host>', 'Override the domain(s) probed by --remote')
+  .action(
+    async (options: { json?: boolean; strict?: boolean; remote?: boolean; domain?: string }) => {
+      if (options.domain && !options.remote) {
+        console.warn(
+          chalk.yellow(
+            'Warning: --domain has no effect without --remote; no association files will be fetched',
+          ),
+        );
+      }
+      const { report, exitCode } = await runCheck(
+        process.cwd(),
+        { readRoutes: parseRoutes, readLinkConfig, readSuppressionConfig, loadAssociations },
+        options,
+      );
+      if (exitCode === 2) {
+        console.error(report);
+      } else {
+        console.log(report);
+      }
+      process.exitCode = exitCode;
+    },
+  );
 
 program.parse(process.argv);

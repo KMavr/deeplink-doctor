@@ -1,10 +1,9 @@
 import { generateFinding } from '../lib/generateFinding.js';
-import type { AasaModel, AssetlinkEntry, Fetcher, Finding } from '../types.js';
+import type { Associations, Fetcher, Finding } from '../types.js';
 import { parseAasa } from './aasa.js';
 import { parseAssetlinks } from './assetlinks.js';
 import { httpFetcher } from './httpFetcher.js';
 
-type Associations = { aasa: AasaModel; assetlinks: AssetlinkEntry[]; findings: Finding[] };
 type FileResult<T> = { value: T | null; findings: Finding[] };
 type FetchResult = { body: string; finding: null } | { body: null; finding: Finding };
 
