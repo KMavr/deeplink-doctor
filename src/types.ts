@@ -65,6 +65,12 @@ export type Finding = {
   target?: string;
 };
 
+// Hosted association files (M7). appIDs flattened across applinks.details[];
+// AASA paths/components are intentionally not modelled until a check consumes them.
+export type AasaModel = { appIDs: string[] };
+
+export type AssetlinkEntry = { packageName: string; fingerprints: string[] };
+
 export type SuppressionRule = {
   code: string;
   route?: string;
