@@ -12,10 +12,16 @@ import type { Associations, Finding, LinkConfig, PathData, SuppressionRule } fro
 type CheckDeps = {
   readRoutes: (root: string) => PathData[];
   readLinkConfig: (root: string) => LinkConfig;
-  readSuppressionConfig: (root: string) => SuppressionRule[];
+  readSuppressionConfig: (root: string, configPath?: string) => SuppressionRule[];
   loadAssociations: (domain: string) => Promise<Associations>;
 };
-type CheckOptions = { strict?: boolean; json?: boolean; remote?: boolean; domain?: string };
+type CheckOptions = {
+  strict?: boolean;
+  json?: boolean;
+  remote?: boolean;
+  domain?: string;
+  config?: string;
+};
 
 const remoteFindings = async (
   config: LinkConfig,
@@ -48,7 +54,10 @@ export const runCheck = async (
       ...(await remoteFindings(config, options, deps.loadAssociations)),
     ];
 
-    const { active, suppressed } = applySuppressions(findings, deps.readSuppressionConfig(root));
+    const { active, suppressed } = applySuppressions(
+      findings,
+      deps.readSuppressionConfig(root, options.config),
+    );
     const report = options.json
       ? json.renderFindings(active, suppressed.length)
       : human.renderFindings(active, suppressed.length);

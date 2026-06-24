@@ -44,8 +44,15 @@ program
     'Also fetch and check hosted association files (AASA, assetlinks) — makes network requests',
   )
   .option('--domain <host>', 'Override the domain(s) probed by --remote')
+  .option('--config <path>', 'Path to a deeplink.config.json (defaults to the project root)')
   .action(
-    async (options: { json?: boolean; strict?: boolean; remote?: boolean; domain?: string }) => {
+    async (options: {
+      json?: boolean;
+      strict?: boolean;
+      remote?: boolean;
+      domain?: string;
+      config?: string;
+    }) => {
       if (options.domain && !options.remote) {
         console.warn(
           chalk.yellow(
