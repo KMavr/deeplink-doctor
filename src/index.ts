@@ -6,6 +6,7 @@ import { readLinkConfig } from './parsers/expoConfig.js';
 import { parseRoutes } from './parsers/routes.js';
 import * as human from './report/human.js';
 import * as json from './report/json.js';
+import { readSuppressionConfig } from './suppressions/readSuppressionConfig.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json') as { version: string; description: string };
@@ -39,7 +40,7 @@ program
   .action((options: { json?: boolean; strict?: boolean }) => {
     const { report, exitCode } = runCheck(
       process.cwd(),
-      { readRoutes: parseRoutes, readLinkConfig },
+      { readRoutes: parseRoutes, readLinkConfig, readSuppressionConfig },
       options,
     );
     if (exitCode === 2) {

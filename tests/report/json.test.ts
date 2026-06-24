@@ -51,8 +51,13 @@ describe('renderFindings', () => {
     ]);
     const parsed = JSON.parse(out);
 
-    expect(parsed.summary).toEqual({ total: 2, errors: 1, warnings: 1 });
+    expect(parsed.summary).toEqual({ total: 2, errors: 1, warnings: 1, suppressed: 0 });
     expect(parsed.findings).toHaveLength(2);
+  });
+
+  it('reports the suppressed count when given one', () => {
+    const parsed = JSON.parse(renderFindings([finding()], 3));
+    expect(parsed.summary.suppressed).toBe(3);
   });
 
   it('preserves finding order and fields verbatim', () => {
@@ -73,6 +78,9 @@ describe('renderFindings', () => {
 
   it('returns zeroed summary and empty list for no findings', () => {
     const parsed = JSON.parse(renderFindings([]));
-    expect(parsed).toEqual({ summary: { total: 0, errors: 0, warnings: 0 }, findings: [] });
+    expect(parsed).toEqual({
+      summary: { total: 0, errors: 0, warnings: 0, suppressed: 0 },
+      findings: [],
+    });
   });
 });

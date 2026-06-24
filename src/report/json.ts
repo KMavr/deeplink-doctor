@@ -14,13 +14,14 @@ export const renderRoutes = (routes: PathData[]): string =>
     2,
   );
 
-export const renderFindings = (findings: Finding[]): string =>
+export const renderFindings = (findings: Finding[], suppressedCount: number = 0): string =>
   JSON.stringify(
     {
       summary: {
         total: findings.length,
         errors: findings.filter((finding) => finding.severity === 'error').length,
         warnings: findings.filter((finding) => finding.severity === 'warn').length,
+        suppressed: suppressedCount,
       },
       findings,
     },
