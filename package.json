@@ -1,6 +1,6 @@
 {
   "name": "deeplink-doctor",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Statically reconcile an Expo project's route tree, native deep-link config, and hosted association files — and report where they disagree.",
   "type": "module",
   "license": "MIT",
