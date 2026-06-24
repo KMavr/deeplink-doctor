@@ -55,9 +55,15 @@ describe('renderFindings', () => {
     expect(parsed.findings).toHaveLength(2);
   });
 
-  it('reports the suppressed count when given one', () => {
-    const parsed = JSON.parse(renderFindings([finding()], 3));
-    expect(parsed.summary.suppressed).toBe(3);
+  it('emits the suppressed findings and their count', () => {
+    const suppressed = [
+      finding({ code: 'DL002', severity: 'warn', route: '/a' }),
+      finding({ code: 'DL002', severity: 'warn', route: '/b' }),
+    ];
+    const parsed = JSON.parse(renderFindings([finding()], suppressed));
+    expect(parsed.summary.suppressed).toBe(2);
+    expect(parsed.suppressed).toHaveLength(2);
+    expect(parsed.suppressed[0]).toMatchObject({ code: 'DL002', route: '/a' });
   });
 
   it('preserves finding order and fields verbatim', () => {
@@ -81,6 +87,7 @@ describe('renderFindings', () => {
     expect(parsed).toEqual({
       summary: { total: 0, errors: 0, warnings: 0, suppressed: 0 },
       findings: [],
+      suppressed: [],
     });
   });
 });

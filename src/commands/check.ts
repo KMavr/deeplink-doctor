@@ -59,8 +59,8 @@ export const runCheck = async (
       deps.readSuppressionConfig(root, options.config),
     );
     const report = options.json
-      ? json.renderFindings(active, suppressed.length)
-      : human.renderFindings(active, suppressed.length);
+      ? json.renderFindings(active, suppressed)
+      : human.renderFindings(active, suppressed);
     return { report, exitCode: calculateExitCode(active, { strict: options.strict ?? false }) };
   } catch (error) {
     return { report: error instanceof Error ? error.message : String(error), exitCode: 2 };
