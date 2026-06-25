@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/KMavr/deeplink-doctor/compare/deeplink-doctor-v1.0.0...deeplink-doctor-v1.0.1) (2026-06-25)
+
+
+### Bug Fixes
+
+* add repository metadata for provenance ([#16](https://github.com/KMavr/deeplink-doctor/issues/16)) ([7bbb22c](https://github.com/KMavr/deeplink-doctor/commit/7bbb22cbf1d4273cc849738111caa9abc028270c))
+
 ## 1.0.0 (2026-06-25)
 
 
