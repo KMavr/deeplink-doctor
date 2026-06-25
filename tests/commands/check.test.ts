@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { runCheck } from '../../src/commands/check.js';
+import { FINDING_EXPLANATIONS } from '../../src/config/findingExplanations.js';
 import { parseRoutePath } from '../../src/routes/parseRoutePath.js';
 import type {
   Associations,
@@ -338,5 +339,19 @@ describe('runCheck (--silent)', () => {
     );
     expect(result.exitCode).toBe(1);
     expect(result.report).toContain('DL002');
+  });
+});
+
+describe('runCheck (--explain)', () => {
+  it('appends finding explanations to the human report', async () => {
+    const result = await runCheck(
+      '/root',
+      deps([route('product/[id].tsx')], config([{ path: '/ghost' }])),
+      { explain: true },
+    );
+    expect(result.report).toContain('DL001');
+    expect(result.report.replace(/\s+/g, ' ')).toContain(
+      FINDING_EXPLANATIONS.DL001.replace(/\s+/g, ' '),
+    );
   });
 });

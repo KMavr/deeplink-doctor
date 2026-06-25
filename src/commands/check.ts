@@ -22,6 +22,7 @@ type CheckOptions = {
   domain?: string;
   config?: string;
   silent?: boolean;
+  explain?: boolean;
 };
 
 const remoteFindings = async (
@@ -65,7 +66,7 @@ export const runCheck = async (
 
     const report = options.json
       ? json.renderFindings(reported, suppressed)
-      : human.renderFindings(reported, suppressed);
+      : human.renderFindings(reported, suppressed, options.explain);
     return { report, exitCode: calculateExitCode(reported, { strict: options.strict ?? false }) };
   } catch (error) {
     return { report: error instanceof Error ? error.message : String(error), exitCode: 2 };
