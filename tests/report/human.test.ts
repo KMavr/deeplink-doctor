@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { FINDING_EXPLANATIONS } from '../../src/config/findingExplanations.js';
 import { renderRoutes, renderFindings } from '../../src/report/human.js';
 import type { Finding, PathData } from '../../src/types.js';
 
@@ -96,5 +97,28 @@ describe('renderFindings', () => {
   it('uses singular nouns for single counts', () => {
     const out = renderFindings([finding({ severity: 'error' })]);
     expect(out).toContain('1 issue (1 error, 0 warnings)');
+  });
+
+  // explanations are word-wrapped, so collapse whitespace before matching the paragraph
+  const flat = (s: string) => s.replace(/\s+/g, ' ');
+
+  it('appends each finding’s explanation when explain is true', () => {
+    const out = renderFindings([finding({ code: 'DL001' })], [], true);
+    expect(flat(out)).toContain(flat(FINDING_EXPLANATIONS.DL001));
+  });
+
+  it('appends the explanation matching each finding’s own code', () => {
+    const out = renderFindings(
+      [finding({ code: 'DL001' }), finding({ code: 'DL002', severity: 'warn' })],
+      [],
+      true,
+    );
+    expect(flat(out)).toContain(flat(FINDING_EXPLANATIONS.DL001));
+    expect(flat(out)).toContain(flat(FINDING_EXPLANATIONS.DL002));
+  });
+
+  it('omits explanations by default', () => {
+    const out = renderFindings([finding({ code: 'DL001' })]);
+    expect(flat(out)).not.toContain(flat(FINDING_EXPLANATIONS.DL001));
   });
 });

@@ -46,6 +46,7 @@ program
   .option('--domain <host>', 'Override the domain(s) probed by --remote')
   .option('--config <path>', 'Path to a deeplink.config.json (defaults to the project root)')
   .option('--silent', 'Hide warnings (errors only); ignored when --strict is set')
+  .option('--explain', 'Append a long-form explanation to each finding')
   .action(
     async (options: {
       json?: boolean;
@@ -54,6 +55,7 @@ program
       domain?: string;
       config?: string;
       silent?: boolean;
+      explain?: boolean;
     }) => {
       if (options.domain && !options.remote) {
         console.warn(

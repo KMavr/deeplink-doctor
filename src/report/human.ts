@@ -1,6 +1,17 @@
 import chalk from 'chalk';
+import { FINDING_EXPLANATIONS } from '../config/findingExplanations.js';
 import { isLinkableRoute } from '../routes/parseRoutePath.js';
 import type { Finding, PathData } from '../types.js';
+
+// Greedy word-wrap into lines no wider than `width`, without mutation.
+const wrap = (text: string, width: number): string[] =>
+  text.split(' ').reduce<string[]>((lines, word) => {
+    const last = lines.at(-1);
+    if (last !== undefined && `${last} ${word}`.length <= width) {
+      return [...lines.slice(0, -1), `${last} ${word}`];
+    }
+    return [...lines, word];
+  }, []);
 
 const tagsFor = (route: PathData): string[] => {
   const tags: [active: boolean, label: string][] = [
@@ -47,7 +58,22 @@ const SEVERITY_LABEL: Record<Finding['severity'], string> = {
   warn: chalk.yellow('warn'),
 };
 
-export const renderFindings = (findings: Finding[], suppressed: Finding[] = []): string => {
+const renderFinding = (finding: Finding, explain: boolean): string => {
+  const line = `  ${chalk.dim(finding.code)}  ${SEVERITY_LABEL[finding.severity]}  ${finding.message}`;
+  if (!explain) {
+    return line;
+  }
+  const explanation = wrap(FINDING_EXPLANATIONS[finding.code], 76)
+    .map((wrapped) => chalk.dim(`      ${wrapped}`))
+    .join('\n');
+  return `${line}\n${explanation}`;
+};
+
+export const renderFindings = (
+  findings: Finding[],
+  suppressed: Finding[] = [],
+  explain: boolean = false,
+): string => {
   const suppressedNote =
     suppressed.length > 0 ? chalk.dim(` (${suppressed.length} suppressed)`) : '';
 
@@ -55,10 +81,7 @@ export const renderFindings = (findings: Finding[], suppressed: Finding[] = []):
     return chalk.green('✓ No deep-link issues found.') + suppressedNote;
   }
 
-  const lines = findings.map(
-    (finding) =>
-      `  ${chalk.dim(finding.code)}  ${SEVERITY_LABEL[finding.severity]}  ${finding.message}`,
-  );
+  const body = findings.map((finding) => renderFinding(finding, explain));
 
   const errors = findings.filter((finding) => finding.severity === 'error').length;
   const warnings = findings.filter((finding) => finding.severity === 'warn').length;
@@ -68,5 +91,5 @@ export const renderFindings = (findings: Finding[], suppressed: Finding[] = []):
         `(${errors} ${plural(errors, 'error')}, ${warnings} ${plural(warnings, 'warning')})`,
     ) + suppressedNote;
 
-  return [...lines, '', summary].join('\n');
+  return [body.join(explain ? '\n\n' : '\n'), '', summary].join('\n');
 };
