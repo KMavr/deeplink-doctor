@@ -5,6 +5,12 @@
   "type": "module",
   "license": "MIT",
   "author": "Konstantinos Mavrikas <mavrikas.konstantinos@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KMavr/deeplink-doctor.git"
+  },
+  "homepage": "https://github.com/KMavr/deeplink-doctor#readme",
+  "bugs": "https://github.com/KMavr/deeplink-doctor/issues",
   "keywords": [
     "expo",
     "expo-router",
