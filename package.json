@@ -17,7 +17,7 @@
     "linter"
   ],
   "bin": {
-    "deeplink-doctor": "./dist/cli/index.js"
+    "deeplink-doctor": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -35,7 +35,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
-    "start": "node dist/cli/index.js",
+    "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src tests",
