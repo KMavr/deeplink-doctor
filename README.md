@@ -33,7 +33,7 @@ npx deeplink-doctor
 That runs every static check — no network, safe on every commit. Add `--remote`
 to also fetch and validate your hosted association files.
 
-Requires Node 18+ and an `expo-router` project (it reads your `app/` directory
+Requires Node 22+ and an `expo-router` project (it reads your `app/` directory
 and `npx expo config --json`).
 
 ## What it catches
