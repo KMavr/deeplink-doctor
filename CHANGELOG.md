@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/KMavr/deeplink-doctor/compare/deeplink-doctor-v1.0.1...deeplink-doctor-v2.0.0) (2026-11-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* require Node 22 or newer ([#28](https://github.com/KMavr/deeplink-doctor/issues/28))
+
+### Features
+
+* require Node 22 or newer ([#28](https://github.com/KMavr/deeplink-doctor/issues/28)) ([4980bc0](https://github.com/KMavr/deeplink-doctor/commit/4980bc0f747677e79a0b50f77691e40c9bbb291f))
+
 ## [1.0.1](https://github.com/KMavr/deeplink-doctor/compare/deeplink-doctor-v1.0.0...deeplink-doctor-v1.0.1) (2026-06-25)
 
 
