@@ -3,6 +3,11 @@
 [![CI](https://github.com/KMavr/deeplink-doctor/actions/workflows/ci.yml/badge.svg)](https://github.com/KMavr/deeplink-doctor/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/deeplink-doctor.svg)](https://www.npmjs.com/package/deeplink-doctor)
 [![npm downloads](https://img.shields.io/npm/dm/deeplink-doctor.svg)](https://www.npmjs.com/package/deeplink-doctor)
+[![unpacked size](https://img.shields.io/npm/unpacked-size/deeplink-doctor.svg)](https://www.npmjs.com/package/deeplink-doctor)
+[![node](https://img.shields.io/node/v/deeplink-doctor.svg)](https://www.npmjs.com/package/deeplink-doctor)
+[![license](https://img.shields.io/npm/l/deeplink-doctor.svg)](./LICENSE)
+[![types](https://img.shields.io/npm/types/deeplink-doctor.svg)](https://www.npmjs.com/package/deeplink-doctor)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fe5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
 > Statically reconcile an Expo project's **route tree**, its **native deep-link
 > config**, and (optionally) its **hosted association files** — and report where
