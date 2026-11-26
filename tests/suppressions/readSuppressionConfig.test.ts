@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { readSuppressionConfig } from '../../src/suppressions/readSuppressionConfig.js';
 
 /**
@@ -65,5 +68,38 @@ describe('readSuppressionConfig', () => {
     expect(() => readSuppressionConfig('/root', './custom/dl.json', read)).toThrow(
       /custom\/dl\.json/,
     );
+  });
+});
+
+describe('readSuppressionConfig default reader (real fs)', () => {
+  const withDir = (fn: (dir: string) => void) => {
+    const dir = mkdtempSync(join(tmpdir(), 'deeplink-'));
+    try {
+      fn(dir);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  };
+
+  it('reads deeplink.config.json from the project root', () => {
+    withDir((dir) => {
+      writeFileSync(
+        join(dir, 'deeplink.config.json'),
+        JSON.stringify({ ignore: [{ code: 'DL1' }] }),
+      );
+      expect(readSuppressionConfig(dir)).toEqual([{ code: 'DL1' }]);
+    });
+  });
+
+  it('returns [] when the default file does not exist', () => {
+    withDir((dir) => {
+      expect(readSuppressionConfig(dir)).toEqual([]);
+    });
+  });
+
+  it('throws when an explicit configPath does not exist', () => {
+    withDir((dir) => {
+      expect(() => readSuppressionConfig(dir, join(dir, 'nope.json'))).toThrow(/not found/);
+    });
   });
 });

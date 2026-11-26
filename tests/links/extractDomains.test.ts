@@ -50,4 +50,16 @@ describe('extractDomains', () => {
   it('returns [] when no domains are configured', () => {
     expect(extractDomains(config({}))).toEqual([]);
   });
+
+  it('tolerates a config with no ios/android sections', () => {
+    expect(extractDomains({ schemes: [] } as unknown as LinkConfig)).toEqual([]);
+  });
+
+  it('skips Android data entries without a host', () => {
+    expect(
+      extractDomains(
+        config({ intentFilters: [{ data: [{ scheme: 'https' }, { host: 'a.com' }] }] }),
+      ),
+    ).toEqual(['a.com']);
+  });
 });
