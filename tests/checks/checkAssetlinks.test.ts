@@ -49,4 +49,10 @@ describe('checkAssetlinks (DL203 / DL204)', () => {
     expect(dl203[0]?.severity).toBe('error');
     expect(dl204[0]?.severity).toBe('warn');
   });
+
+  it('ignores non-matching entries alongside a matching one with fingerprints', () => {
+    expect(
+      codes([entry('com.other.app', []), entry('com.example.app')], config('com.example.app')),
+    ).toEqual([]);
+  });
 });
